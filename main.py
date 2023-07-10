@@ -1,6 +1,11 @@
 import random
 
 
+# class MyExceptionHandling(Exception):
+#     def __init__(self, message):
+#         super().__init__(message)
+
+
 class Participant:
     def __init__(self):
         self._participant_code = self._make_participant_code()
@@ -9,6 +14,7 @@ class Participant:
         self._age = -1
         self._height = -1
         self._weight = -1
+
 # def __init__(self, name, lastname, age, height, weight):
 #         self._participant_code = self._make_participant_code()
 #         self._name = name
@@ -56,18 +62,35 @@ class Participant:
     
     @height.setter
     def height(self, value):
-        pass
+        if not (170 <= value <= 190):
+            raise ValueError('Height out of range.\nThis person is not allowed to register.')
+        self._height = value
 
     @property
     def weight(self):
-        return 
+        return self._weight
     
     @weight.setter
     def weight(self, value):
-        pass
+        try:
+            value = float(value)
+
+        except ValueError:
+            raise ValueError('Weight is not valid!')
+
+        else:
+            if not (50 <= value <= 80):
+                raise ValueError('Weight out of range!\nThis person is not allowed to register.')
+
+            self._weight = float(value)
 
 
 
+# ----------------------------------------------
 
-o = Participant()
-o.age = 35
+participant = Participant()
+# participant.age = 35
+try:
+    participant.weight = input('Enter weight : ')
+except ValueError as error:
+    print(error)
