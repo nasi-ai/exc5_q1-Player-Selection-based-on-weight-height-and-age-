@@ -39,13 +39,20 @@ class Participant:
 
     # Check if a value is positive integer / can convert to integer or not
     @staticmethod
-    def _check_integer(value):
+    def _is_integer(value):
         try:
-            if not int(value) < 0:
-                return True
+            v = int(value)
+            if v < 0:
+                return False
+            return True
         except ValueError:
             return False
 
+        # try:
+        #     if not int(value) < 0:
+        #         return True
+        # except ValueError:
+        #     return False
     @property
     def name(self):
         return self.name
@@ -68,15 +75,13 @@ class Participant:
 
     @age.setter
     def age(self, value):
-        # try:
-        #     age = Participant._check_integer(value)
-        # except ValueError:
-        #     raise InvalidAgeException('Age is not valid')
-        # else:
-        #     if not (15 <= age <= 35):
-        #         raise InvalidAgeException('Age out of range.\nThis person is not allowed to register.')
-        #
-        # self._age = age
+        if not Participant._is_integer(value):
+            raise InvalidAgeException('Age is not valid')
+        else:
+            if not (15 <= int(value) <= 35):
+                raise InvalidAgeException('Age out of range.\nThis person is not allowed to register.')
+
+        self._age = int(value)
 
     @property
     def height(self):
@@ -119,7 +124,7 @@ participant = Participant()
 
 # participant.age = '35'
 try:
-    c= Participant._check_integer('36')
+    c= Participant._is_integer('65')
 except ValueError as error:
     print(error)
 else:
