@@ -5,6 +5,9 @@ import random
 #     def __init__(self, message):
 #         super().__init__(message)
 
+class InvalidWeightException(Exception):
+    'Raised when the input value is less than 18'
+    pass
 
 class Participant:
     def __init__(self):
@@ -76,11 +79,11 @@ class Participant:
             value = float(value)
 
         except ValueError:
-            raise ValueError('Weight is not valid!')
+            raise InvalidWeightException('Weight is not valid!')
 
         else:
             if not (50 <= value <= 80):
-                raise ValueError('Weight out of range!\nThis person is not allowed to register.')
+                raise InvalidWeightException('Weight out of range!\nThis person is not allowed to register.')
 
             self._weight = float(value)
 
@@ -92,5 +95,5 @@ participant = Participant()
 # participant.age = 35
 try:
     participant.weight = input('Enter weight : ')
-except ValueError as error:
+except InvalidWeightException as error:
     print(error)
