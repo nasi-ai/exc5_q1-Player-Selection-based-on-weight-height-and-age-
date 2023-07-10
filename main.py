@@ -6,12 +6,17 @@ import random
 #         super().__init__(message)
 
 class InvalidWeightException(Exception):
-    'Raised when the input value is less than 18'
+    'Raised when the input value is '
     pass
 
 
 class InvalidAgeException(Exception):
-    'Raised when the input value is less than 18'
+    'Raised when the input value is '
+    pass
+
+
+class InvalidHeightException(Exception):
+    'Raised when the input value is not integer or not between 170 and 190'
     pass
 
 
@@ -48,11 +53,6 @@ class Participant:
         except ValueError:
             return False
 
-        # try:
-        #     if not int(value) < 0:
-        #         return True
-        # except ValueError:
-        #     return False
     @property
     def name(self):
         return self.name
@@ -85,13 +85,17 @@ class Participant:
 
     @property
     def height(self):
-        return 
+        return self._height
     
     @height.setter
     def height(self, value):
-        if not (170 <= value <= 190):
-            raise ValueError('Height out of range.\nThis person is not allowed to register.')
-        self._height = value
+        if not Participant._is_integer(value):
+            raise InvalidHeightException('Height is not valid!')
+
+        if not (170 <= int(value) <= 190):
+            raise InvalidHeightException('Height out of range.\nThis person is not allowed to register.')
+
+        self._height = int(value)
 
     @property
     def weight(self):
@@ -117,15 +121,16 @@ class Participant:
 
 participant = Participant()
 
-# try:
-#     participant.weight = input('Enter weight : ')
-# except InvalidWeightException as error:
-#     print(error)
-
-# participant.age = '35'
 try:
-    c= Participant._is_integer('65')
-except ValueError as error:
+    participant.weight = input('Enter weight : ')
+    participant.height = input('Enter height : ')
+    participant.age = input('Enter age : ')
+
+except InvalidWeightException as error:
     print(error)
-else:
-    print(c)
+except InvalidAgeException as error:
+    print(error)
+except InvalidHeightException as error:
+    print(error)
+# except InvalidWeightException or InvalidAgeException or InvalidWeightException as error:
+#     print(error)
