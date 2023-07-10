@@ -10,6 +10,11 @@ class InvalidWeightException(Exception):
     pass
 
 
+class InvalidAgeException(Exception):
+    'Raised when the input value is less than 18'
+    pass
+
+
 class Participant:
     def __init__(self):
         self._participant_code = self._make_participant_code()
@@ -32,17 +37,14 @@ class Participant:
         rnd = random.randint(1000, 2000)
         return rnd
 
-    # Check if a value is integer / can convert to integer or not. If ok, the value is converted
+    # Check if a value is positive integer / can convert to integer or not
     @staticmethod
     def _check_integer(value):
         try:
-            converted_value = int(value)
-            if converted_value < 0:
-                raise ValueError(f'{value} is not (+)integer! You must enter a positive number.')
+            if not int(value) < 0:
+                return True
         except ValueError:
-            raise ValueError(f'{value} is not integer! You must enter a positive number.')
-        else:
-            return int(value)
+            return False
 
     @property
     def name(self):
@@ -65,12 +67,16 @@ class Participant:
         return self._age
 
     @age.setter
-    def age(self, age):
-        if not isinstance(age, int):
-            raise ValueError('Age must be an integer.')
-        if not (15 <= age <= 35):
-            raise ValueError('Age must be between 15 and 35.')
-        self._age = age
+    def age(self, value):
+        # try:
+        #     age = Participant._check_integer(value)
+        # except ValueError:
+        #     raise InvalidAgeException('Age is not valid')
+        # else:
+        #     if not (15 <= age <= 35):
+        #         raise InvalidAgeException('Age out of range.\nThis person is not allowed to register.')
+        #
+        # self._age = age
 
     @property
     def height(self):
