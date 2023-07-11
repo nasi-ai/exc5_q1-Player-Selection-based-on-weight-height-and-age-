@@ -17,13 +17,13 @@ class InvalidAgeException(Exception):
 
 class Participant:
 
-    def __init__(self, name, lastname, age, height, weight):
+    def __init__(self, v_name, v_lastname, v_age, v_height, v_weight):
         self._participant_code = self._make_participant_code()
-        self._name = name
-        self._lastname = lastname
-        self.age = age
-        self.height = height
-        self.weight = weight
+        self._name = v_name
+        self._lastname = v_lastname
+        self.age = v_age
+        self.height = v_height
+        self.weight = v_weight
 
     def __str__(self):
         return f'{self._participant_code}' \
@@ -118,7 +118,7 @@ try:
     weight = input('Enter weight : ')
     height = input('Enter height : ')
     age = input('Enter age : ')
-    participant = Participant(name=name, lastname=lastname, age=age, weight=weight, height=height)
+    participant = Participant(v_name=name, v_lastname=lastname, v_age=age, v_weight=weight, v_height=height)
 
 except InvalidWeightException as error:
     print(error)
