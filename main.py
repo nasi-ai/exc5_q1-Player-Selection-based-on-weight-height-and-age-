@@ -1,29 +1,29 @@
 import random
 
 
-# class MyExceptionHandling(Exception):
-#     def __init__(self, message):
-#         super().__init__(message)
+class MyExceptionHandling(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
-class InvalidWeightException(Exception):
-    'Raised when the input value is less than 18'
-    pass
-
-
-class InvalidAgeException(Exception):
-    'Raised when the input value is '
-    pass
-
-
-class InvalidHeightException(Exception):
-    'Raised when the input value is not integer or not between 170 and 190'
-    pass
+# class InvalidWeightException(Exception):
+#     'Raised when the input value is less than 18'
+#     pass
+#
+#
+# class InvalidAgeException(Exception):
+#     'Raised when the input value is '
+#     pass
+#
+#
+# class InvalidHeightException(Exception):
+#     'Raised when the input value is not integer or not between 170 and 190'
+#     pass
 
 
 class Participant:
 
     def __init__(self, v_name, v_lastname, v_age, v_height, v_weight):
-        self._participant_code = self._make_participant_code()
+        self._participant_code = self._generate_participant_code()
         self._name = v_name
         self._lastname = v_lastname
         self.age = v_age
@@ -39,7 +39,7 @@ class Participant:
                f'{self._weight}'
 
     @staticmethod
-    def _make_participant_code():
+    def _generate_participant_code():
         rnd = random.randint(1000, 2000)
         return rnd
 
@@ -53,6 +53,38 @@ class Participant:
             return True
         except ValueError:
             return False
+
+    @staticmethod
+    def _is_float(value):
+        try:
+            v = float(value)
+            if v < 0:
+                return False
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def validate_weight(value):
+        if not Participant._is_float(value):
+            raise MyExceptionHandling('weight is not valid!')
+
+        weight_value = float(value)
+        if not (50 <= weight_value <= 80):
+            raise MyExceptionHandling('Weight out of range! This person is not allowed to register.')
+
+        return weight_value
+
+    @staticmethod
+    def validate_height(value):
+        if not Participant._is_integer(value):
+            raise MyExceptionHandling('Height is not valid!')
+        else:
+            height_value = int(value)
+            if not (170 <= height_value <= 190):
+                raise MyExceptionHandling('Height out of range.\nThis person is not allowed to register.')
+
+        return height_value
 
     @property
     def name(self):
@@ -76,13 +108,17 @@ class Participant:
 
     @age.setter
     def age(self, value):
-        if not Participant._is_integer(value):
-            raise InvalidAgeException('Age is not valid')
+        if value is None:
+            age_value = None
         else:
-            if not (15 <= int(value) <= 35):
-                raise InvalidAgeException('Age out of range.\nThis person is not allowed to register.')
+            if not Participant._is_integer(value):
+                raise MyExceptionHandling('Age is not valid')
+            else:
+                age_value = int(value)
+                if not (15 <= age_value <= 35):
+                    raise MyExceptionHandling('Age out of range.\nThis person is not allowed to register.')
 
-        self._age = int(value)
+        self._age = age_value
 
     @property
     def height(self):
@@ -90,13 +126,12 @@ class Participant:
     
     @height.setter
     def height(self, value):
-        if not Participant._is_integer(value):
-            raise InvalidHeightException('Height is not valid!')
+        if value is None:
+            height_value = None
+        else:
+            height_value = self.validate_height(value)
 
-        if not (170 <= int(value) <= 190):
-            raise InvalidHeightException('Height out of range.\nThis person is not allowed to register.')
-
-        self._height = int(value)
+        self._height = height_value
 
     @property
     def weight(self):
@@ -104,38 +139,31 @@ class Participant:
     
     @weight.setter
     def weight(self, value):
-        try:
-            value = float(value)
-
-        except ValueError:
-            raise InvalidWeightException('Weight is not valid!')
-
+        if value is not None:
+            self._weight = self.validate_weight(value)
         else:
-            if not (50 <= value <= 80):
-                raise InvalidWeightException('Weight out of range!\nThis person is not allowed to register.')
-
-            self._weight = float(value)
-
-
+            self._weight = None
 
 # ----------------------------------------------
 
 
 try:
     name = input('Enter name : ')
-    lastname = input('Enter lastname : ')
-    weight = input('Enter weight : ')
-    height = input('Enter height : ')
-    age = input('Enter age : ')
-    participant = Participant(v_name=name, v_lastname=lastname, v_age=age, v_weight=weight, v_height=height)
+    if not name.isalpha():
+        raise MyExceptionHandling('Invalid name! Name should only contain alphabetic characters.')
 
-except InvalidWeightException as error:
+    lastname = input('Enter lastname : ')
+    if not lastname.isalpha():
+        raise MyExceptionHandling('Invalid Lastname! Lastname should only contain alphabetic characters.')
+
+    participant = Participant(v_name=name, v_lastname=lastname, v_age=None, v_weight=None, v_height=None)
+
+    participant.age = input('Enter age : ')
+    participant.weight = input('Enter weight : ')
+    participant.height = input('Enter height : ')
+
+except MyExceptionHandling as error:
     print(error)
-except InvalidAgeException as error:
-    print(error)
-except InvalidHeightException as error:
-    print(error)
-# except InvalidWeightException or InvalidAgeException or InvalidWeightException as error:
-#     print(error)
+
 else:
     print(participant)
