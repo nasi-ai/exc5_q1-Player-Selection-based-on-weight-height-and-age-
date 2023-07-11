@@ -16,21 +16,22 @@ class InvalidAgeException(Exception):
 
 
 class Participant:
-    def __init__(self):
-        self._participant_code = self._make_participant_code()
-        self._name = None
-        self._lastname = None
-        self._age = -1
-        self._height = -1
-        self._weight = -1
 
-# def __init__(self, name, lastname, age, height, weight):
-#         self._participant_code = self._make_participant_code()
-#         self._name = name
-#         self._lastname = lastname
-#         self._age = age
-#         self._height = height
-#         self._weight = weight
+    def __init__(self, name, lastname, age, height, weight):
+        self._participant_code = self._make_participant_code()
+        self._name = name
+        self._lastname = lastname
+        self.age = age
+        self.height = height
+        self.weight = weight
+
+    def __str__(self):
+        return f'{self._participant_code}' \
+               f'{self._name}' \
+               f'{self._lastname}' \
+               f'{self._age}' \
+               f'{self._height}' \
+               f'{self._weight}'
 
     @staticmethod
     def _make_participant_code():
@@ -48,11 +49,6 @@ class Participant:
         except ValueError:
             return False
 
-        # try:
-        #     if not int(value) < 0:
-        #         return True
-        # except ValueError:
-        #     return False
     @property
     def name(self):
         return self.name
@@ -115,17 +111,20 @@ class Participant:
 
 # ----------------------------------------------
 
-participant = Participant()
 
-# try:
-#     participant.weight = input('Enter weight : ')
-# except InvalidWeightException as error:
-#     print(error)
-
-# participant.age = '35'
 try:
-    c= Participant._is_integer('65')
-except ValueError as error:
+    name = input('Enter name : ')
+    lastname = input('Enter lastname : ')
+    weight = input('Enter weight : ')
+    height = input('Enter height : ')
+    age = input('Enter age : ')
+    participant = Participant(name=name, lastname=lastname, age=age, weight=weight, height=height)
+
+except InvalidWeightException as error:
     print(error)
+except InvalidAgeException as error:
+    print(error)
+# except InvalidHeightException as error:
+#     print(error)
 else:
-    print(c)
+    print(participant)
