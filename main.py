@@ -64,14 +64,21 @@ class Participant:
         except ValueError:
             return False
 
-    @staticmethod
-    def validate_weight(value):
+    def validate_weight(self, value):
+        # if age is not entered, raise an Error.
+        if self.age is None:
+            raise MyExceptionHandling('Age is not entered, first enter the age, then continue...')
+
         if not Participant._is_float(value):
             raise MyExceptionHandling('weight is not valid!')
 
         weight_value = float(value)
-        if not (50 <= weight_value <= 80):
-            raise MyExceptionHandling('Weight out of range! This person is not allowed to register.')
+        if 15 <= self.age < 25:
+            if not (60 <= weight_value <= 80):
+                raise MyExceptionHandling('Weight out of range! This person is not allowed to register.')
+        else:
+            if not (50 <= weight_value <= 75):
+                raise MyExceptionHandling('Weight out of range! This person is not allowed to register.')
 
         return weight_value
 
