@@ -11,7 +11,12 @@ class InvalidWeightException(Exception):
 
 
 class InvalidAgeException(Exception):
-    'Raised when the input value is less than 18'
+    'Raised when the input value is '
+    pass
+
+
+class InvalidHeightException(Exception):
+    'Raised when the input value is not integer or not between 170 and 190'
     pass
 
 
@@ -81,13 +86,17 @@ class Participant:
 
     @property
     def height(self):
-        return 
+        return self._height
     
     @height.setter
     def height(self, value):
-        if not (170 <= value <= 190):
-            raise ValueError('Height out of range.\nThis person is not allowed to register.')
-        self._height = value
+        if not Participant._is_integer(value):
+            raise InvalidHeightException('Height is not valid!')
+
+        if not (170 <= int(value) <= 190):
+            raise InvalidHeightException('Height out of range.\nThis person is not allowed to register.')
+
+        self._height = int(value)
 
     @property
     def weight(self):
@@ -124,7 +133,9 @@ except InvalidWeightException as error:
     print(error)
 except InvalidAgeException as error:
     print(error)
-# except InvalidHeightException as error:
+except InvalidHeightException as error:
+    print(error)
+# except InvalidWeightException or InvalidAgeException or InvalidWeightException as error:
 #     print(error)
 else:
     print(participant)
