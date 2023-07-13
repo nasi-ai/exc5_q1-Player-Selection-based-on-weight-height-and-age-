@@ -1,4 +1,4 @@
-# exc5_question-1
+# exc5_question-1 (Exception handling excersise)
 Exception handling excersise
 
 ![image](https://github.com/nasi-ai/exc5_question-1/assets/138897558/6ecdeaea-9b11-45d8-abb0-da800491addb)
