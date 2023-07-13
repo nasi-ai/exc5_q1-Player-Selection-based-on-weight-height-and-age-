@@ -5,6 +5,7 @@ class MyExceptionHandling(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+
 # class InvalidWeightException(Exception):
 #     'Raised when the input value is less than 18'
 #     pass
@@ -22,21 +23,29 @@ class MyExceptionHandling(Exception):
 
 class Participant:
 
-    def __init__(self, v_name, v_lastname, v_age, v_height, v_weight):
+    def __init__(self):
         self._participant_code = self._generate_participant_code()
-        self._name = v_name
-        self._lastname = v_lastname
-        self.age = v_age
-        self.height = v_height
-        self.weight = v_weight
+        self._name = None
+        self._lastname = None
+        self._age = None
+        self._weight = None
+        self._height = None
+
+    # def __init__(self, v_name, v_lastname, v_age, v_height, v_weight):
+    #      self._participant_code = self._generate_participant_code()
+    #      self._name = v_name
+    #      self._lastname = v_lastname
+    #      self.age = v_age
+    #      self.height = v_height
+    #      self.weight = v_weight
 
     def __str__(self):
-        return f'{self._participant_code}' \
-               f'{self._name}' \
-               f'{self._lastname}' \
-               f'{self._age}' \
-               f'{self._height}' \
-               f'{self._weight}'
+        return f'Player Code: {self._participant_code}\n' \
+               f'Name: {self._name}\n' \
+               f'Lastname: {self._lastname}\n' \
+               f'Age: {self._age}\n' \
+               f'Height: {self._height}\n' \
+               f'Weight: {self._weight}\n'
 
     @staticmethod
     def _generate_participant_code():
@@ -96,17 +105,23 @@ class Participant:
     @property
     def name(self):
         return self.name
-    
+
     @name.setter
     def name(self, value):
+        if not value.isalpha():
+            raise MyExceptionHandling('Invalid name! Name should only contain alphabetic characters.')
+
         self._name = value
-    
+
     @property
     def lastname(self):
         return self.lastname
-    
+
     @lastname.setter
     def lastname(self, value):
+        if not value.isalpha():
+            raise MyExceptionHandling('Invalid lastname! Lastname should only contain alphabetic characters.')
+
         self._lastname = value
 
     @property
@@ -130,20 +145,20 @@ class Participant:
     @property
     def height(self):
         return self._height
-    
+
     @height.setter
     def height(self, value):
         if value is None:
             height_value = None
         else:
-            height_value = self.validate_height(value)
+            height_value = Participant.validate_height(value)
 
         self._height = height_value
 
     @property
     def weight(self):
         return self._weight
-    
+
     @weight.setter
     def weight(self, value):
         if value is not None:
@@ -151,26 +166,40 @@ class Participant:
         else:
             self._weight = None
 
+    # Check if weight and height is valid
+    def register_player(self):
+
+        try:
+            self.name = input('Enter name : ')
+            self.lastname = input('Enter lastname : ')
+            self.age = input('Enter age : ')
+            self.weight = input('Enter weight : ')
+            self.height = input('Enter height : ')
+        except MyExceptionHandling as error:
+            print(error)
+        else:
+            return self
+
+    @staticmethod
+    def show_final_players(player_list):
+        print('\t\t------- List of final Players ------\t\t')
+        for player in players_list:
+            print(player)
+
+
 # ----------------------------------------------
 
+participant = Participant()
+players_list = []
 
-try:
-    name = input('Enter name : ')
-    if not name.isalpha():
-        raise MyExceptionHandling('Invalid name! Name should only contain alphabetic characters.')
+while True:
+    player = participant.register_player()
+    if player is not None:
+        players_list.append(player)
 
-    lastname = input('Enter lastname : ')
-    if not lastname.isalpha():
-        raise MyExceptionHandling('Invalid Lastname! Lastname should only contain alphabetic characters.')
+    choice = input('If you dont want to add another player, press 0,'
+                   ' otherwise press any key you want.\n')
+    if choice == '0':
+        break
 
-    participant = Participant(v_name=name, v_lastname=lastname, v_age=None, v_weight=None, v_height=None)
-
-    participant.age = input('Enter age : ')
-    participant.weight = input('Enter weight : ')
-    participant.height = input('Enter height : ')
-
-except MyExceptionHandling as error:
-    print(error)
-
-else:
-    print(participant)
+Participant.show_final_players(players_list)
