@@ -183,7 +183,7 @@ class Participant:
     @staticmethod
     def show_final_players(player_list):
         print('\t\t------- List of final Players ------\t\t')
-        for player in players_list:
+        for player in player_list:
             print(player)
 
 
